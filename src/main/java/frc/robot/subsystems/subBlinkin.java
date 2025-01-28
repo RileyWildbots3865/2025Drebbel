@@ -30,8 +30,8 @@ public class subBlinkin extends SubsystemBase {
   }
 
   public void random() {
-    double randDouble = 2*Math.floor(100*Math.random()) - 99;
-    blinkin.set(randDouble / 100);
+      double randDouble = 2*Math.floor(100*Math.random()) - 99;
+      blinkin.set((double) randDouble / 100);
   }
   
   public void rainbow() {
