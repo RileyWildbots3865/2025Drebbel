@@ -13,4 +13,9 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 6.3;
     public static final double kMaxAngularSpeed = 3.8 * Math.PI; // radians per second
   }
+  public static final class MechConstants{
+    public static final int intakeCanId = 9;
+    public static final int funnelCanId = 10;
+    public static final int elevatorCanId = 11;
+  }
 }
