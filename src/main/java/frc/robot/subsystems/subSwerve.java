@@ -24,10 +24,10 @@ import frc.robot.classes.swerveModule;
 
 public class subSwerve extends SubsystemBase {
 
-  public static final double kFrontLeftOffset = 0.73974609375;
-  public static final double kFrontRightOffset = 0.261962890625;
-  public static final double kRearLeftOffset = 0.809326171875;
-  public static final double kRearRightOffset = 0.570068359375;
+  public static final double kFrontLeftOffset = 0;
+  public static final double kFrontRightOffset = 0;
+  public static final double kRearLeftOffset = 0;
+  public static final double kRearRightOffset = 0;
   // front left module
   public static final int kFrontLeftDrivingCanId = 5;
   public static final int kFrontLeftTurningCanId = 6;
@@ -35,15 +35,15 @@ public class subSwerve extends SubsystemBase {
   // front right module
   public static final int kFrontRightDrivingCanId = 3;
   public static final int kFrontRightTurningCanId = 4;
-  public static final int kFrontRightCANcoder = 4;  
+  public static final int kFrontRightCANcoder = 3;  
   // rear left module
   public static final int kRearLeftDrivingCanId = 7;
   public static final int kRearLeftTurningCanId = 8;
-  public static final int kRearLeftCANcoder = 2;
+  public static final int kRearLeftCANcoder = 4;
   // rear right module
   public static final int kRearRightDrivingCanId = 2;
   public static final int kRearRightTurningCanId = 1;
-  public static final int kRearRightCANcoder = 3;
+  public static final int kRearRightCANcoder = 2;
 
   private final swerveModule frontLeftModule = new swerveModule(kFrontLeftDrivingCanId,kFrontLeftTurningCanId,kFrontLeftCANcoder,kFrontLeftOffset);
   private final swerveModule frontRightModule = new swerveModule(kFrontRightDrivingCanId,kFrontRightTurningCanId,kFrontRightCANcoder,kFrontRightOffset);
