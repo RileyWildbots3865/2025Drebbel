@@ -14,7 +14,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 public class subElevator extends SubsystemBase {
   /** Creates a new subElevator. */
-  SparkMax elevatorMotor;
+  public SparkMax elevatorMotor;
 
   public subElevator() {
     elevatorMotor = new SparkMax(MechConstants.elevatorCanId, MotorType.kBrushless);
