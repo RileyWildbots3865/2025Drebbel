@@ -65,7 +65,7 @@ public class swerveModule {
 
         driveConfig.idleMode(moduleConstants.kDrivingMotorIdleMode);
         driveConfig.smartCurrentLimit(moduleConstants.kDrivingMotorCurrentLimit);
-        //driveConfig.inverted(true);
+        driveConfig.inverted(true);
 
         SparkBaseConfig turnConfig = new SparkMaxConfig();
         turnConfig.inverted(true);
@@ -95,15 +95,12 @@ public class swerveModule {
         drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, SparkMax.ControlType.kVelocity);
 
         turningSparkMax.set(turningPIDController.calculate(getAngle(), optimizedDesiredState.angle.getDegrees()));
-        //SmartDashboard.putNumber(name + " Wheel Angle: ", getAngle());
-        //SmartDashboard.putNumber(name + " Wheel Goal", optimizedDesiredState.angle.getDegrees());
-        //SmartDashboard.putNumber(name + " Wheel PID", turningPIDController.calculate(getAngle(), optimizedDesiredState.angle.getDegrees()));
     }
     public double getAngle(){
         return rotationEncoder.getAbsolutePosition().getValueAsDouble() * 360;
     }
     public double getRawAngle(){        
-        return rotationEncoder.getAbsolutePosition().getValueAsDouble();    
+        return rotationEncoder.getAbsolutePosition().getValueAsDouble(); //* 360;    
     }
     public Rotation2d getRotation2d() {   
         return Rotation2d.fromDegrees(getAngle());     

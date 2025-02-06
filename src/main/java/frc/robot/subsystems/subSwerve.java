@@ -24,26 +24,26 @@ import frc.robot.classes.swerveModule;
 
 public class subSwerve extends SubsystemBase {
 
-  public static final double kFrontLeftOffset = 4.8351074434;
-  public static final double kFrontRightOffset = 0.443320447697851;
-  public static final double kRearLeftOffset = 4.6694375183123;
-  public static final double kRearRightOffset = 5.032990965040304;
+  public static final double kFrontLeftOffset = 0.557373046875;
+  public static final double kFrontRightOffset = 0.809814453125;
+  public static final double kRearLeftOffset = 0.990234375;
+  public static final double kRearRightOffset = 0.019287109375;
   // front left module
-  public static final int kFrontLeftDrivingCanId = 1;
-  public static final int kFrontLeftTurningCanId = 2;
-  public static final int kFrontLeftCANcoder = 1;  
+  public static final int kFrontLeftDrivingCanId = 2;
+  public static final int kFrontLeftTurningCanId = 1;
+  public static final int kFrontLeftCANcoder = 2;
   // front right module
   public static final int kFrontRightDrivingCanId = 3;
   public static final int kFrontRightTurningCanId = 4;
   public static final int kFrontRightCANcoder = 3;  
   // rear left module
-  public static final int kRearLeftDrivingCanId = 5;
-  public static final int kRearLeftTurningCanId = 6;
+  public static final int kRearLeftDrivingCanId = 6;
+  public static final int kRearLeftTurningCanId = 5;
   public static final int kRearLeftCANcoder = 4;
   // rear right module
   public static final int kRearRightDrivingCanId = 7;
   public static final int kRearRightTurningCanId = 8;
-  public static final int kRearRightCANcoder = 2;
+  public static final int kRearRightCANcoder = 1;
 
   private final swerveModule frontLeftModule = new swerveModule(kFrontLeftDrivingCanId,kFrontLeftTurningCanId,kFrontLeftCANcoder,kFrontLeftOffset);
   private final swerveModule frontRightModule = new swerveModule(kFrontRightDrivingCanId,kFrontRightTurningCanId,kFrontRightCANcoder,kFrontRightOffset);
@@ -139,7 +139,7 @@ public class subSwerve extends SubsystemBase {
     SmartDashboard.putNumber("FrontLeftAngle", frontLeftModule.getRawAngle() * 360);
     SmartDashboard.putNumber("FrontRightAngle", frontRightModule.getRawAngle() * 360);    
     SmartDashboard.putNumber("BackLeftAngle", rearLeftModule.getRawAngle() * 360);    
-    SmartDashboard.putNumber("BackRightAngle", rearRightModule.getRawAngle() * 360); 
+    SmartDashboard.putNumber("BackRightAngle", rearRightModule.getRawAngle() * 360);
     
     SmartDashboard.putNumber("FrontLeftSpeed", frontLeftModule.drivingSparkMax.getEncoder().getVelocity());
     SmartDashboard.putNumber("FrontRightSpeed", frontRightModule.drivingSparkMax.getEncoder().getVelocity());
