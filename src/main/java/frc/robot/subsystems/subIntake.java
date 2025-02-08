@@ -16,11 +16,14 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 public class subIntake extends SubsystemBase {
   /** Creates a new subIntake. */
-  public SparkMax intakeMotor;
+  public SparkMax intakeMotor1;
+  public SparkMax intakeMotor2;
 
   public subIntake() {
-    intakeMotor = new SparkMax(MechConstants.intakeCanId, MotorType.kBrushless);
-    intakeMotor.configure(null, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    intakeMotor1 = new SparkMax(MechConstants.intake1CanId, MotorType.kBrushless);
+    intakeMotor1.configure(null, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    intakeMotor2 = new SparkMax(MechConstants.intake1CanId, MotorType.kBrushless);
+    intakeMotor2.configure(null, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override
