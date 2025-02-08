@@ -5,7 +5,13 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.cmdElevator_TeleOp;
+import frc.robot.commands.cmdFunnel_TeleOp;
+import frc.robot.commands.cmdIntake_TeleOp;
 import frc.robot.commands.cmdSwerve_TeleOp;
+import frc.robot.subsystems.subElevator;
+import frc.robot.subsystems.subFunnel;
+import frc.robot.subsystems.subIntake;
 import frc.robot.subsystems.subSwerve;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -19,6 +25,9 @@ public class RobotContainer {
   private final CommandPS5Controller driverOne = new CommandPS5Controller(OperatorConstants.DriverOne);
   private final CommandPS5Controller driverTwo = new CommandPS5Controller(OperatorConstants.DriverTwo);
   private final subSwerve swerve = new subSwerve();
+  private final subIntake intake = new subIntake();
+  private final subFunnel funnel = new subFunnel();
+  private final subElevator elevator = new subElevator();
 
   public static boolean fieldCentric = false;
 
@@ -42,9 +51,15 @@ public class RobotContainer {
     driverOne.PS().onTrue(new InstantCommand(() -> swerve.zeroHeading()));
   }
 
-  public void configureDriverTwo() {
-    // Binds for controller 2
-    //drivertwo.PS().onTrue(new InstantCommand(() -> ))
+  public void configureDriverTwo() { // Binds for controller 2
+    driverTwo.povUp().whileTrue(new cmdElevator_TeleOp(elevator, true)); // Elevator = up, down
+    driverTwo.povDown().whileTrue(new cmdElevator_TeleOp(elevator, false));
+
+    driverTwo.triangle().whileTrue(new cmdIntake_TeleOp(intake, true)); // intake = triangle, circle
+    driverTwo.circle().whileTrue(new cmdIntake_TeleOp(intake, false));
+
+    driverTwo.square().whileTrue(new cmdFunnel_TeleOp(funnel, true));
+    driverTwo.cross().whileTrue(new cmdFunnel_TeleOp(funnel, false));
   }
 
   private void addAutoOptions(){
