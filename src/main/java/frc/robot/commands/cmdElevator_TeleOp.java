@@ -16,11 +16,13 @@ public class cmdElevator_TeleOp extends Command {
 
     @Override
     public void execute() {
-        elevator.elevatorMotor.set((up) ? Constants.MechConstants.kelevatorSpeed : -Constants.MechConstants.kelevatorSpeed);
+        elevator.elevatorMotor1.set((up) ? Constants.MechConstants.kelevatorSpeed : -Constants.MechConstants.kelevatorSpeed);
+        elevator.elevatorMotor2.set((!up) ? Constants.MechConstants.kelevatorSpeed : -Constants.MechConstants.kelevatorSpeed);
     }
 
     @Override
     public void end(boolean isFinished) {
-        elevator.elevatorMotor.set(0);
+        elevator.elevatorMotor1.set(0);
+        elevator.elevatorMotor2.set(0);
     }
 }

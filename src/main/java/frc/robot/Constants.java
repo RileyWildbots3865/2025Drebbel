@@ -16,7 +16,8 @@ public final class Constants {
   public static final class MechConstants{
     public static final int intakeCanId = 9;
     public static final int funnelCanId = 10;
-    public static final int elevatorCanId = 11;
+    public static final int elevator1CanId = 11;
+    public static final int elevator2CanId = 12;
 
     public static final double kelevatorSpeed = 0.2;
   }
