@@ -17,12 +17,10 @@ public class cmdIntake_TeleOp extends Command {
     @Override
     public void execute() {
         intake.intakeMotor1.set((in) ? Constants.MechConstants.kintakeSpeed : -Constants.MechConstants.kintakeSpeed);
-        intake.intakeMotor2.set((!in) ? Constants.MechConstants.kintakeSpeed : -Constants.MechConstants.kintakeSpeed);
     }
 
     @Override
     public void end(boolean isFinished) {
         intake.intakeMotor1.set(0);
-        intake.intakeMotor2.set(0);
     }
 }

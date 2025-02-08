@@ -11,14 +11,22 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class subFunnel extends SubsystemBase {
   /** Creates a new subFunnel. */
-  SparkMax funnelMotor;
+  public SparkMax funnelMotor1;
+  public SparkMax funnelMotor2;
   
+  SparkMaxConfig funnelConfig = new SparkMaxConfig();
+
   public subFunnel() {
-    funnelMotor = new SparkMax(MechConstants.funnelCanId, MotorType.kBrushless);
-    funnelMotor.configure(null, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    funnelConfig.follow(funnelMotor1, true);
+
+    funnelMotor1 = new SparkMax(MechConstants.funnel1CanId, MotorType.kBrushless);
+    funnelMotor1.configure(null, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    funnelMotor2 = new SparkMax(MechConstants.funnel2CanId, MotorType.kBrushless);
+    funnelMotor2.configure(funnelConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override

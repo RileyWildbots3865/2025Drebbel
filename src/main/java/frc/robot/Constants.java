@@ -16,11 +16,13 @@ public final class Constants {
   public static final class MechConstants{
     public static final int intake1CanId = 9;
     public static final int intake2CanId = 10;
-    public static final int funnelCanId = 11;
-    public static final int elevator1CanId = 12;
-    public static final int elevator2CanId = 13;
+    public static final int funnel1CanId = 11;
+    public static final int funnel2CanId = 12;
+    public static final int elevator1CanId = 13;
+    public static final int elevator2CanId = 14;
 
     public static final double kelevatorSpeed = 0.2;
     public static final double kintakeSpeed = 0.2;
+    public static final double kfunnelSpeed = 0.1;
   }
 }

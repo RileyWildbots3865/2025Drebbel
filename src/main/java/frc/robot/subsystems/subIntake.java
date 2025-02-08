@@ -13,17 +13,22 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class subIntake extends SubsystemBase {
   /** Creates a new subIntake. */
   public SparkMax intakeMotor1;
   public SparkMax intakeMotor2;
 
+  SparkMaxConfig intakeConfig = new SparkMaxConfig();
+
   public subIntake() {
+    intakeConfig.follow(intakeMotor1, true);
+
     intakeMotor1 = new SparkMax(MechConstants.intake1CanId, MotorType.kBrushless);
     intakeMotor1.configure(null, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    intakeMotor2 = new SparkMax(MechConstants.intake1CanId, MotorType.kBrushless);
-    intakeMotor2.configure(null, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    intakeMotor2 = new SparkMax(MechConstants.intake2CanId, MotorType.kBrushless);
+    intakeMotor2.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override
