@@ -60,13 +60,9 @@ public class subElevator extends SubsystemBase {
   public void goToPosL2() {
     elevatorMotor1.set(ElevatorPid.calculate(getEncoderValue(),L2));
   }
-  
+
   public void goToPosL1() {
     elevatorMotor1.set(ElevatorPid.calculate(getEncoderValue(),L1));
-  }
-
-  public void goToPos(double L) {
-    elevatorMotor1.set(ElevatorPid.calculate(getEncoderValue(),L));
   }
 
   public double getEncoderValue() {
