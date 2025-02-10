@@ -14,6 +14,8 @@ import frc.robot.subsystems.subFunnel;
 import frc.robot.subsystems.subIntake;
 import frc.robot.subsystems.subSwerve;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +30,9 @@ public class RobotContainer {
   private final subIntake intake = new subIntake();
   private final subFunnel funnel = new subFunnel();
   private final subElevator elevator = new subElevator();
+
+  DigitalInput topLimitSwitch = new DigitalInput(0);
+  DigitalInput bottomLimitSwitch = new DigitalInput(1);
 
   public static boolean fieldCentric = false;
 
@@ -49,14 +54,21 @@ public class RobotContainer {
           () -> fieldCentric));
 
     driverOne.PS().onTrue(new InstantCommand(() -> swerve.zeroHeading()));
+
+    //rumble ball
+    if (topLimitSwitch.get()) {
+      driverOne.setRumble(RumbleType.kBothRumble, 1);
+    } else if (bottomLimitSwitch.get()) {
+      driverOne.setRumble(RumbleType.kBothRumble, 1);
+    }
+
+    driverOne.R1().whileTrue(new cmdIntake_TeleOp(intake, true)); // intake = triangle, circle
+    driverOne.L1().whileTrue(new cmdIntake_TeleOp(intake, false));
   }
 
   public void configureDriverTwo() { // Binds for controller 2
     driverTwo.povUp().whileTrue(new cmdElevator_TeleOp(elevator, true)); // Elevator = up, down
     driverTwo.povDown().whileTrue(new cmdElevator_TeleOp(elevator, false));
-
-    driverTwo.triangle().whileTrue(new cmdIntake_TeleOp(intake, true)); // intake = triangle, circle
-    driverTwo.circle().whileTrue(new cmdIntake_TeleOp(intake, false));
 
     driverTwo.square().whileTrue(new cmdFunnel_TeleOp(funnel, true));
     driverTwo.cross().whileTrue(new cmdFunnel_TeleOp(funnel, false));
