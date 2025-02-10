@@ -5,7 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.MechConstants;
+import frc.robot.Constants.Funnel;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -23,9 +23,9 @@ public class subFunnel extends SubsystemBase {
   public subFunnel() {
     funnelConfig.follow(funnelMotor1, true);
 
-    funnelMotor1 = new SparkMax(MechConstants.funnel1CanId, MotorType.kBrushless);
+    funnelMotor1 = new SparkMax(Funnel.funnel1CanId, MotorType.kBrushless);
     funnelMotor1.configure(null, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    funnelMotor2 = new SparkMax(MechConstants.funnel2CanId, MotorType.kBrushless);
+    funnelMotor2 = new SparkMax(Funnel.funnel2CanId, MotorType.kBrushless);
     funnelMotor2.configure(funnelConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 

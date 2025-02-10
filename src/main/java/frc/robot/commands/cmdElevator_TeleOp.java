@@ -16,7 +16,7 @@ public class cmdElevator_TeleOp extends Command {
 
     @Override
     public void execute() {
-        elevator.elevatorMotor1.set((up) ? Constants.MechConstants.kelevatorSpeed : -Constants.MechConstants.kelevatorSpeed);
+        elevator.elevatorMotor1.set((up) ? Constants.Elevator.kelevatorSpeed : -Constants.Elevator.kelevatorSpeed);
     }
 
     @Override

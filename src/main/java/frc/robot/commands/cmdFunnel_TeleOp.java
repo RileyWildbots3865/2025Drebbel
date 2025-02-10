@@ -16,7 +16,7 @@ public class cmdFunnel_TeleOp extends Command {
 
     @Override
     public void execute() {
-        funnel.funnelMotor1.set((up) ? Constants.MechConstants.kfunnelSpeed : -Constants.MechConstants.kfunnelSpeed);
+        funnel.funnelMotor1.set((up) ? Constants.Funnel.kfunnelSpeed : -Constants.Funnel.kfunnelSpeed);
     }
 
     @Override

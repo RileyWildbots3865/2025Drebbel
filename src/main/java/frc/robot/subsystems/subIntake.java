@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import frc.robot.Constants.MechConstants;
+import frc.robot.Constants.Intake;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -25,9 +25,9 @@ public class subIntake extends SubsystemBase {
   public subIntake() {
     intakeConfig.follow(intakeMotor1, true);
 
-    intakeMotor1 = new SparkMax(MechConstants.intake1CanId, MotorType.kBrushless);
+    intakeMotor1 = new SparkMax(Intake.intake1CanId, MotorType.kBrushless);
     intakeMotor1.configure(null, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    intakeMotor2 = new SparkMax(MechConstants.intake2CanId, MotorType.kBrushless);
+    intakeMotor2 = new SparkMax(Intake.intake2CanId, MotorType.kBrushless);
     intakeMotor2.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 

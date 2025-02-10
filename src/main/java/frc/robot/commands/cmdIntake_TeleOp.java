@@ -16,7 +16,7 @@ public class cmdIntake_TeleOp extends Command {
 
     @Override
     public void execute() {
-        intake.intakeMotor1.set((in) ? Constants.MechConstants.kintakeSpeed : -Constants.MechConstants.kintakeSpeed);
+        intake.intakeMotor1.set((in) ? Constants.Intake.kintakeSpeed : -Constants.Intake.kintakeSpeed);
     }
 
     @Override
