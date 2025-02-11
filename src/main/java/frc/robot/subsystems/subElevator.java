@@ -25,10 +25,10 @@ public class subElevator extends SubsystemBase {
   public RelativeEncoder ElevatorEncoder;
 
   private PIDController ElevatorPid = new PIDController(0.4, 0, 0);
-  private double L4 = 100.0;
+  /*private double L4 = 100.0;
   private double L3 = 70.0;
   private double L2 = 40.0;
-  private double L1 = 13.5;
+  private double L1 = 13.5; */
 
   SparkMaxConfig elevator1Config = new SparkMaxConfig();
   SparkMaxConfig elevator2Config = new SparkMaxConfig();
@@ -49,20 +49,8 @@ public class subElevator extends SubsystemBase {
     ElevatorPid.setIntegratorRange(-1, 1);
   }
 
-  public void goToPosL4() {
-    elevatorMotor1.set(ElevatorPid.calculate(getEncoderValue(),L4));
-  }
-
-  public void goToPosL3() {
-    elevatorMotor1.set(ElevatorPid.calculate(getEncoderValue(),L3));
-  }
-
-  public void goToPosL2() {
-    elevatorMotor1.set(ElevatorPid.calculate(getEncoderValue(),L2));
-  }
-
-  public void goToPosL1() {
-    elevatorMotor1.set(ElevatorPid.calculate(getEncoderValue(),L1));
+  public void goToPosL(double L) {
+    elevatorMotor1.set(ElevatorPid.calculate(getEncoderValue(), L));
   }
 
   public double getEncoderValue() {
