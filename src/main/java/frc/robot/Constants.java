@@ -35,5 +35,13 @@ public final class Constants {
     public static final double L3 = 70;
     public static final double L2 = 40;
     public static final double L1 = 13.5;
+
+    public static final double pUp = 0.4;
+    public static final double iUp = 0;
+    public static final double dUp = 0;
+
+    public static final double pDown = 0.1;
+    public static final double iDown = 0;
+    public static final double dDown = 0;
   }
 }
