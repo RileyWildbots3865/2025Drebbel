@@ -53,6 +53,15 @@ public class subElevator extends SubsystemBase {
     elevatorMotor1.set(ElevatorPid.calculate(getEncoderValue(), L));
   }
 
+  public void goToPosLTest(double L) {
+    if (getEncoderValue() < L) {
+      ElevatorPid.setPID(Elevator.pUp,Elevator.iUp,Elevator.dUp);
+    } else {
+      ElevatorPid.setPID(Elevator.pDown,Elevator.iDown,Elevator.dDown);
+    }
+    elevatorMotor1.set(ElevatorPid.calculate(getEncoderValue(), L));
+  }
+
   public double getEncoderValue() {
     return ElevatorEncoder.getPosition();
   }
