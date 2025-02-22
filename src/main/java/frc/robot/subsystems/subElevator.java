@@ -27,10 +27,6 @@ public class subElevator extends SubsystemBase {
   public RelativeEncoder ElevatorEncoder;
 
   private PIDController ElevatorPid = new PIDController(0.05,0,0);
-  /*private double L4 = 100.0;
-  private double L3 = 70.0;
-  private double L2 = 40.0;
-  private double L1 = 13.5; */
 
   SparkMaxConfig elevator1Config = new SparkMaxConfig();
   SparkMaxConfig elevator2Config = new SparkMaxConfig();
