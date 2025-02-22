@@ -4,9 +4,11 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.Elevator;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -24,7 +26,7 @@ public class subElevator extends SubsystemBase {
 
   public RelativeEncoder ElevatorEncoder;
 
-  private PIDController ElevatorPid = new PIDController(0.4, 0, 0);
+  private PIDController ElevatorPid = new PIDController(0.05,0,0);
   /*private double L4 = 100.0;
   private double L3 = 70.0;
   private double L2 = 40.0;
@@ -33,33 +35,33 @@ public class subElevator extends SubsystemBase {
   SparkMaxConfig elevator1Config = new SparkMaxConfig();
   SparkMaxConfig elevator2Config = new SparkMaxConfig();
 
+  public double ElpidSetPoint;
+
   public subElevator() {
-    elevator1Config.idleMode(IdleMode.kBrake);
-    elevator2Config.follow(elevatorMotor1, true);
-    elevator2Config.idleMode(IdleMode.kBrake);
-    
     elevatorMotor1 = new SparkMax(Elevator.elevator1CanId, MotorType.kBrushless);
-    elevatorMotor1.configure(elevator1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     elevatorMotor2 = new SparkMax(Elevator.elevator2CanId, MotorType.kBrushless);
-    elevatorMotor2.configure(elevator2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     ElevatorEncoder = elevatorMotor1.getEncoder();
 
-    ElevatorPid.setTolerance(5);
+    elevator1Config.idleMode(IdleMode.kBrake);
+    elevator2Config.follow(elevatorMotor1, true);
+    elevator2Config.idleMode(IdleMode.kBrake);
+    elevatorMotor1.configure(elevator1Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    elevatorMotor2.configure(elevator2Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    ElevatorPid.setTolerance(0.01);
     ElevatorPid.setIntegratorRange(-1, 1);
+    ResetEncoder();
+    ElpidSetPoint = Constants.Elevator.L2;
   }
 
-  public void goToPosL(double L) {
-    elevatorMotor1.set(ElevatorPid.calculate(getEncoderValue(), L));
+  public void gotoElevatorPos() {
+    ElevatorPid.setSetpoint(ElpidSetPoint);
+    elevatorMotor1.set(MathUtil.clamp(ElevatorPid.calculate(getEncoderValue()), -0.1, 0.1));
   }
 
-  public void goToPosLTest(double L) {
-    if (getEncoderValue() < L) {
-      ElevatorPid.setPID(Elevator.pUp,Elevator.iUp,Elevator.dUp);
-    } else {
-      ElevatorPid.setPID(Elevator.pDown,Elevator.iDown,Elevator.dDown);
-    }
-    elevatorMotor1.set(ElevatorPid.calculate(getEncoderValue(), L));
+  public void TeleOp(double speed){
+    elevatorMotor1.set(speed);
   }
 
   public double getEncoderValue() {
@@ -68,6 +70,10 @@ public class subElevator extends SubsystemBase {
 
   public void ResetEncoder() {
     ElevatorEncoder.setPosition(0);
+  }
+
+  public void stop() {
+    elevatorMotor1.stopMotor();
   }
 
   @Override
