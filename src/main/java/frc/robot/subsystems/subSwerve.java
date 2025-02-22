@@ -135,7 +135,7 @@ public class subSwerve extends SubsystemBase {
   public void periodic() {
     updateOdometry();
     SmartDashboard.putNumber("Gyro", gyro.getRotation2d().getDegrees());
-    // SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+    SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     SmartDashboard.putNumber("FrontLeftAngle", frontLeftModule.getRawAngle() * 360);
     SmartDashboard.putNumber("FrontRightAngle", frontRightModule.getRawAngle() * 360);    
     SmartDashboard.putNumber("BackLeftAngle", rearLeftModule.getRawAngle() * 360);    
