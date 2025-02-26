@@ -4,10 +4,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.studica.frc.AHRS;
-//import com.pathplanner.lib.auto.AutoBuilder;
-//import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-//import com.pathplanner.lib.util.PIDConstants;
-//import com.pathplanner.lib.util.ReplanningConfig;
 import com.studica.frc.AHRS.NavXComType;
 
 import edu.wpi.first.math.geometry.Pose2d;
