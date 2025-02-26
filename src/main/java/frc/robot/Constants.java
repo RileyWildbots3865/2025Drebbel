@@ -26,7 +26,7 @@ public final class Constants {
     public static final double kfunnelSpeed = 0.1;
 
     public static final double LUp = -7.785732746124268;
-    public static final double LRest = -1.500001072883606;
+    public static final double LRest = -1.690476655960083;
   }
   public static final class Elevator {
     public static final int elevator1CanId = 13;
