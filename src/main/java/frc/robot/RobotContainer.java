@@ -34,10 +34,7 @@ public class RobotContainer {
   private final subIntake intake = new subIntake();
   private final subFunnel funnel = new subFunnel();
   private final subElevator elevator = new subElevator();
-  private final subCage cage = new subCage();
-
-  //DigitalInput topLimitSwitch = new DigitalInput(0);
-  //DigitalInput bottomLimitSwitch = new DigitalInput(1);
+  private final subCage cage = new subCage(); 
 
   public static boolean fieldCentric = false;
 
@@ -49,6 +46,8 @@ public class RobotContainer {
     addAutoOptions();
   }
   private void configureSingleDriver(){
+    driverOne.PS().onTrue(new InstantCommand(() -> swerve.zeroHeading()));
+    driverOne.button(9).onTrue(new InstantCommand(() -> fieldCentric = !fieldCentric));
     swerve.setDefaultCommand(
       new cmdSwerve_TeleOp(
           swerve,
@@ -77,7 +76,7 @@ public class RobotContainer {
   }
 
   private void configureDriverOne() { // Binds for controller 1
-    driverOne.triangle().onTrue(new InstantCommand(() -> fieldCentric = !fieldCentric));
+    driverOne.button(9).onTrue(new InstantCommand(() -> fieldCentric = !fieldCentric));
     swerve.setDefaultCommand(
       new cmdSwerve_TeleOp(
           swerve,
@@ -87,13 +86,6 @@ public class RobotContainer {
           () -> fieldCentric));
 
     driverOne.PS().onTrue(new InstantCommand(() -> swerve.zeroHeading()));
-
-    //rumble ball
-    /*if (topLimitSwitch.get()) {
-      driverOne.setRumble(RumbleType.kBothRumble, 1);
-    } else if (bottomLimitSwitch.get()) {
-      driverOne.setRumble(RumbleType.kBothRumble, 1);
-    }*/
 
     driverOne.R1().whileTrue(new cmdIntake_TeleOp(intake, true));
     driverOne.L1().whileTrue(new cmdIntake_TeleOp(intake, false));
