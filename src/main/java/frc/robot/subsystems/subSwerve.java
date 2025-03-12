@@ -1,8 +1,13 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
@@ -20,26 +25,26 @@ import frc.robot.classes.swerveModule;
 
 public class subSwerve extends SubsystemBase {
 
-  public static final double kFrontLeftOffset = 0.557373046875;
-  public static final double kFrontRightOffset = 0.809814453125;
-  public static final double kRearLeftOffset = 0.990234375;
-  public static final double kRearRightOffset = 0.019287109375;
+  public static final double kFrontLeftOffset = 0.060302734375;
+  public static final double kFrontRightOffset = 0.28173828125 ;
+  public static final double kRearLeftOffset = 0.80859375 ;
+  public static final double kRearRightOffset = 0.23779296875;
   // front left module
-  public static final int kFrontLeftDrivingCanId = 2;
-  public static final int kFrontLeftTurningCanId = 1;
-  public static final int kFrontLeftCANcoder = 2;
+  public static final int kFrontLeftDrivingCanId = 3;
+  public static final int kFrontLeftTurningCanId = 4;
+  public static final int kFrontLeftCANcoder = 3;
   // front right module
-  public static final int kFrontRightDrivingCanId = 3;
-  public static final int kFrontRightTurningCanId = 4;
-  public static final int kFrontRightCANcoder = 3;  
+  public static final int kFrontRightDrivingCanId = 7;
+  public static final int kFrontRightTurningCanId = 8;
+  public static final int kFrontRightCANcoder = 1;
   // rear left module
-  public static final int kRearLeftDrivingCanId = 6;
-  public static final int kRearLeftTurningCanId = 5;
-  public static final int kRearLeftCANcoder = 4;
+  public static final int kRearLeftDrivingCanId = 2;
+  public static final int kRearLeftTurningCanId = 1;
+  public static final int kRearLeftCANcoder = 2;
   // rear right module
-  public static final int kRearRightDrivingCanId = 7;
-  public static final int kRearRightTurningCanId = 8;
-  public static final int kRearRightCANcoder = 1;
+  public static final int kRearRightDrivingCanId = 6;
+  public static final int kRearRightTurningCanId = 5;
+  public static final int kRearRightCANcoder = 4;
 
   private final swerveModule frontLeftModule = new swerveModule(kFrontLeftDrivingCanId,kFrontLeftTurningCanId,kFrontLeftCANcoder,kFrontLeftOffset);
   private final swerveModule frontRightModule = new swerveModule(kFrontRightDrivingCanId,kFrontRightTurningCanId,kFrontRightCANcoder,kFrontRightOffset);
@@ -83,6 +88,7 @@ public class subSwerve extends SubsystemBase {
       },
       pose);
   }
+
   public void updateOdometry(){
     odometry.update(
     getRotation2d(),
@@ -94,11 +100,11 @@ public class subSwerve extends SubsystemBase {
       });
   }
 
-  
   public void drive(double xSpeed, double ySpeed, double rot, boolean isFieldRelative) {
     var swerveModuleStates = moduleConstants.kDriveKinematics.toSwerveModuleStates(isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getRotation2d()) : new ChassisSpeeds(xSpeed, ySpeed, rot));
     setModuleStates(swerveModuleStates);
   }
+  
 
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.DriveConstants.kMaxSpeedMetersPerSecond);
@@ -127,9 +133,57 @@ public class subSwerve extends SubsystemBase {
   public void zeroHeading() { gyro.reset(); }
   public Rotation2d getRotation2d() { return gyro.getRotation2d();}
 
+  public ChassisSpeeds getRobotRelativeSpeeds() {
+    return moduleConstants.kDriveKinematics.toChassisSpeeds(
+      frontLeftModule.getState(),
+      frontRightModule.getState(),
+      rearLeftModule.getState(),
+      rearRightModule.getState()
+    );
+  }
+
+  public void driveRobotRelative(ChassisSpeeds speeds) {
+    SwerveModuleState[] states = moduleConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+    setModuleStates(states);
+  }
+
+  public void setUpPathPlanner() {
+    RobotConfig config;
+    try{
+      config = RobotConfig.fromGUISettings();
+      AutoBuilder.configure(
+            this::getPose, // Robot pose supplier
+            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+            new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+            ),
+            config, // The robot configuration
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
+    );
+    } catch (Exception e) {
+      // Handle exception as needed
+      e.printStackTrace();
+    }
+  }
+
   @Override
   public void periodic() {
     updateOdometry();
+    System.out.println("test");
     SmartDashboard.putNumber("Gyro", gyro.getRotation2d().getDegrees());
     SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     SmartDashboard.putNumber("FrontLeftAngle", frontLeftModule.getRawAngle() * 360);

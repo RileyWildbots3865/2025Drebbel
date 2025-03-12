@@ -84,6 +84,13 @@ public class swerveModule {
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(drivingEncoder.getPosition(), getRotation2d());
     }
+
+    public SwerveModuleState getState() {
+        return new SwerveModuleState(
+            drivingSparkMax.getEncoder().getVelocity(),
+            getRotation2d()
+        );
+    }
     
     public void setDesiredState(SwerveModuleState desiredState) {
         SwerveModuleState optimizedDesiredState = desiredState;

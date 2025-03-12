@@ -7,9 +7,17 @@ package frc.robot;
 import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.commands.cmdIntake_Stop;
+import frc.robot.commands.cmdIntake_TeleOp;
+import frc.robot.subsystems.subIntake;
+import frc.robot.subsystems.subLimeLight;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -17,10 +25,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * this project, you must also update the Main.java file in the project.
  */
 public class Robot extends TimedRobot {
+  
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -41,10 +49,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
+     //DigitalInput inSensor = new DigitalInput(Constants.Intake.inSensor);
+     //DigitalInput outSensor = new DigitalInput(Constants.Intake.outSensor);
     CommandScheduler.getInstance().run();
   }
 
@@ -72,6 +78,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+   
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -84,6 +92,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {}
+  
 
   @Override
   public void testInit() {

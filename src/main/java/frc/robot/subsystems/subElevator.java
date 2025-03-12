@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Elevator;
+import frc.robot.commands.cmdElevator_Auto;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -26,7 +27,7 @@ public class subElevator extends SubsystemBase {
 
   public RelativeEncoder ElevatorEncoder;
 
-  private PIDController ElevatorPid = new PIDController(0.05,0,0);
+  private PIDController ElevatorPid = new PIDController(0.1,0,0);
 
   SparkMaxConfig elevator1Config = new SparkMaxConfig();
   SparkMaxConfig elevator2Config = new SparkMaxConfig();
@@ -49,11 +50,12 @@ public class subElevator extends SubsystemBase {
     ElevatorPid.setIntegratorRange(-1, 1);
     ResetEncoder();
     ElpidSetPoint = Constants.Elevator.L2;
+    setDefaultCommand(new cmdElevator_Auto(this, Constants.Elevator.L1));
   }
 
   public void gotoElevatorPos() {
     ElevatorPid.setSetpoint(ElpidSetPoint);
-    elevatorMotor1.set(MathUtil.clamp(ElevatorPid.calculate(getEncoderValue()), -0.1, 0.1));
+    elevatorMotor1.set(MathUtil.clamp(ElevatorPid.calculate(getEncoderValue()), -0.3, 0.1));
   }
 
   public void TeleOp(double speed){
