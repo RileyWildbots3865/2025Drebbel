@@ -48,10 +48,9 @@ public class subIntake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    // System.out.println(inSensor.get());
-    // System.out.println("blocked");
-    SmartDashboard.putBoolean("coral in Sensor",!inSensor.get());
+    //System.out.println(inSensor.get());
+    //System.out.println("blocked");
+    SmartDashboard.putBoolean("coral in Sensor",inSensor.get());
     if (!inSensor.get() == true) {
       intakeMotor1.set(Constants.Intake.kintakeSpeed);
     }else{

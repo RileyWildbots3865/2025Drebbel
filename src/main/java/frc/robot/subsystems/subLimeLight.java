@@ -13,14 +13,6 @@ public class subLimeLight extends SubsystemBase {
   public subLimeLight() {
   }
 
-  @Override
-  public void periodic() {
-    System.out.println("subLimeLight periodic running...");
-    SmartDashboard.putBoolean("Limelight Has Target", hasTarget());
-    SmartDashboard.putNumber("Limelight Horizontal Error", getHorizontalError()-Constants.LimeLightOffsets.HorizontalOffset);
-    SmartDashboard.putNumber("Limelight Distance Error", getDistanceError()-Constants.LimeLightOffsets.DistanceOffset);
-  }
-
   public double getHorizontalError(){
     // Horizontal offset from crosshair to target in degrees
     return LimelightHelpers.getTX("limelight-right");
@@ -33,4 +25,14 @@ public class subLimeLight extends SubsystemBase {
     // Do you have a valid target?
     return LimelightHelpers.getTV("limelight-right");
   }
+
+  @Override
+  public void periodic() {
+    System.out.println("subLimeLight periodic running...");
+    // SmartDashboard.putBoolean("Limelight Has Target", LimelightHelpers.getTV("limelight-right"));
+    // SmartDashboard.putNumber("Limelight Horizontal Error", getHorizontalError()-Constants.LimeLightOffsets.HorizontalOffset);
+    // SmartDashboard.putNumber("Limelight Distance Error", getDistanceError()-Constants.LimeLightOffsets.DistanceOffset);
+  }
+
+  
 }

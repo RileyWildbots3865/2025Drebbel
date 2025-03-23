@@ -5,7 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.cmdAuto_CrossLine;
+//import frc.robot.commands.cmdAuto_CrossLine;
 import frc.robot.commands.cmdCage_TeleOp;
 import frc.robot.commands.cmdElevator_Auto;
 import frc.robot.commands.cmdElevator_TeleOp;
@@ -20,19 +20,22 @@ import frc.robot.subsystems.subFunnel;
 import frc.robot.subsystems.subIntake;
 import frc.robot.subsystems.subSwerve;
 
+import java.util.Set;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+//import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+//import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+//import edu.wpi.first.wpilibj.DigitalInput;
+//import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import frc.robot.Constants.DriveConstants;;
 
 
 public class RobotContainer {
@@ -43,6 +46,8 @@ public class RobotContainer {
   private final subFunnel funnel = new subFunnel();
   private final subElevator elevator = new subElevator();
   private final subCage cage = new subCage(); 
+
+
 
   public static boolean fieldCentric = false;
 
@@ -101,7 +106,7 @@ public class RobotContainer {
 
     driverOne.R1().whileTrue(new cmdIntake_TeleOp(intake, true));
     driverOne.L1().whileTrue(new cmdIntake_TeleOp(intake, false));
-  }
+    }
 
   public void configureDriverTwo() { // Binds for controller 2
     driverTwo.povUp().whileTrue(new cmdElevator_TeleOp(elevator, true)); 
@@ -109,17 +114,18 @@ public class RobotContainer {
 
     driverTwo.povLeft().whileTrue(new cmdFunnel_TeleOp(funnel, true));
     driverTwo.povRight().whileTrue(new cmdFunnel_TeleOp(funnel, false));
-
-    driverTwo.L1().whileTrue(new cmdCage_TeleOp(cage, true));
-    driverTwo.R1().whileTrue(new cmdCage_TeleOp(cage, false));
+    //cage
+    driverTwo.L1().whileTrue(new cmdCage_TeleOp( cage, true ));
+    driverTwo.R1().whileTrue(new cmdCage_TeleOp( cage, false));
 
     driverTwo.R2().whileTrue(new cmdFunnel_Auto(funnel, Constants.Funnel.LRest));
     driverTwo.L2().whileTrue(new cmdFunnel_Auto(funnel, Constants.Funnel.LUp));
+    
 
     driverTwo.cross().whileTrue(new cmdElevator_Auto(elevator, Constants.Elevator.L1));
     driverTwo.square().whileTrue(new cmdElevator_Auto(elevator, Constants.Elevator.L2));
     driverTwo.triangle().whileTrue(new cmdElevator_Auto(elevator, Constants.Elevator.L3));
-    driverTwo.circle().whileTrue(new cmdElevator_Auto(elevator, Constants.Elevator.L4));
+   // driverTwo.circle().whileTrue(new cmdElevator_Auto(elevator, Constants.Elevator.L4));
   }
 
   public void commandConfigure() {
@@ -129,6 +135,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ElevatorL2", new cmdElevator_Auto(elevator, Constants.Elevator.L2).withTimeout(2));
     NamedCommands.registerCommand("ElevatorL3", new cmdElevator_Auto(elevator, Constants.Elevator.L3).withTimeout(2));
     NamedCommands.registerCommand("ElevatorL4", new cmdElevator_Auto(elevator, Constants.Elevator.L4));
+    
   }
 
   private void addAutoOptions(){

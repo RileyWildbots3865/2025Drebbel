@@ -1,16 +1,25 @@
 package frc.robot.commands;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
-import frc.robot.subsystems.subLimeLight;
-import frc.robot.subsystems.subSwerve;
+import frc.robot.subsystems.*;
 //import swervelib.SwerveInputStream;
 
 public class cmdAuto_AlightRobot extends Command {
+  private void addCommands(InstantCommand instantCommand, Command auto, InstantCommand instantCommand2) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'addCommands'");
+  }
+  private final subElevator elevator = new subElevator();
   subSwerve swerve;
   subLimeLight limelight;
   PIDController pidHorizontalController = new PIDController(0.7, 0.0, 0.0);
@@ -33,10 +42,18 @@ public class cmdAuto_AlightRobot extends Command {
 
   @Override
   public void execute() {
-    if(!limelight.hasTarget()){
-      swerve.drive(0, 0, 0, true);    
+    addCommands(
+                 new InstantCommand(() -> System.out.println("Starting Auto...")),
+                 AutoBuilder.buildAuto("LeftToReef"), // This runs the auto
+                 new InstantCommand(() -> System.out.println("Auto Finished!"))
+             );
+    if(limelight.hasTarget()){
+      elevator.startRun(elevator.gotoElevatorPos(), null);
+     elevator.gotoElevatorPos();
+
       return;
-    }
+    } 
+    
     swerve.drive(
       MathUtil.clamp(-pidDistanceController.calculate(limelight.getDistanceError()), -0.4, 0),
       MathUtil.clamp(-pidHorizontalController.calculate(limelight.getHorizontalError()), -0.5, 0.5), 

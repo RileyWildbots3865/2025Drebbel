@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -11,6 +12,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -51,17 +53,18 @@ public class subSwerve extends SubsystemBase {
   private final swerveModule rearLeftModule = new swerveModule(kRearLeftDrivingCanId,kRearLeftTurningCanId,kRearLeftCANcoder,kRearLeftOffset);
   private final swerveModule rearRightModule = new swerveModule(kRearRightDrivingCanId,kRearRightTurningCanId,kRearRightCANcoder,kRearRightOffset);
   
-  public AHRS gyro;
-  public SwerveDriveOdometry odometry;
+  public Pigeon2 gyro;
+  public SwerveDriveOdometry odometry;  
+  //add pos estimator
 
   public subSwerve() {
-    gyro = new AHRS(NavXComType.kUSB1);
+    gyro = new Pigeon2(18);
     // warning: thread may reset gyro while trying to read during odomerty intit
     new Thread(() -> {
       try {
         Thread.sleep(1000);
         gyro.reset();
-        gyro.zeroYaw();
+        gyro.setYaw(0);
       } catch (Exception e) { }
     }).start();
 
@@ -183,17 +186,16 @@ public class subSwerve extends SubsystemBase {
   @Override
   public void periodic() {
     updateOdometry();
-    System.out.println("test");
     SmartDashboard.putNumber("Gyro", gyro.getRotation2d().getDegrees());
-    SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
-    SmartDashboard.putNumber("FrontLeftAngle", frontLeftModule.getRawAngle() * 360);
-    SmartDashboard.putNumber("FrontRightAngle", frontRightModule.getRawAngle() * 360);    
-    SmartDashboard.putNumber("BackLeftAngle", rearLeftModule.getRawAngle() * 360);    
-    SmartDashboard.putNumber("BackRightAngle", rearRightModule.getRawAngle() * 360);
+    // SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+    // SmartDashboard.putNumber("FrontLeftAngle", frontLeftModule.getRawAngle() * 360);
+    // SmartDashboard.putNumber("FrontRightAngle", frontRightModule.getRawAngle() * 360);    
+    // SmartDashboard.putNumber("BackLeftAngle", rearLeftModule.getRawAngle() * 360);    
+    // SmartDashboard.putNumber("BackRightAngle", rearRightModule.getRawAngle() * 360);
     
-    SmartDashboard.putNumber("FrontLeftSpeed", frontLeftModule.drivingSparkMax.getEncoder().getVelocity());
-    SmartDashboard.putNumber("FrontRightSpeed", frontRightModule.drivingSparkMax.getEncoder().getVelocity());
-    SmartDashboard.putNumber("BackLeftSpeed", rearLeftModule.drivingSparkMax.getEncoder().getVelocity());
-    SmartDashboard.putNumber("BackRightSpeed", rearRightModule.drivingSparkMax.getEncoder().getVelocity());
+    // SmartDashboard.putNumber("FrontLeftSpeed", frontLeftModule.drivingSparkMax.getEncoder().getVelocity());
+    // SmartDashboard.putNumber("FrontRightSpeed", frontRightModule.drivingSparkMax.getEncoder().getVelocity());
+    // SmartDashboard.putNumber("BackLeftSpeed", rearLeftModule.drivingSparkMax.getEncoder().getVelocity());
+    // SmartDashboard.putNumber("BackRightSpeed", rearRightModule.drivingSparkMax.getEncoder().getVelocity());
   }
 }

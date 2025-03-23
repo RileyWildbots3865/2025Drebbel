@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.commands.cmdIntake_Stop;
 import frc.robot.commands.cmdIntake_TeleOp;
+import frc.robot.subsystems.subElevator;
 import frc.robot.subsystems.subIntake;
 import frc.robot.subsystems.subLimeLight;
 
@@ -28,6 +30,7 @@ public class Robot extends TimedRobot {
   
   private Command m_autonomousCommand;
 
+
   private final RobotContainer m_robotContainer;
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -38,6 +41,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     Pathfinding.setPathfinder(new LocalADStar());
     m_robotContainer = new RobotContainer();
+    CameraServer.startAutomaticCapture(0);
   }
 
   /**
@@ -52,6 +56,8 @@ public class Robot extends TimedRobot {
      //DigitalInput inSensor = new DigitalInput(Constants.Intake.inSensor);
      //DigitalInput outSensor = new DigitalInput(Constants.Intake.outSensor);
     CommandScheduler.getInstance().run();
+     
+    
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

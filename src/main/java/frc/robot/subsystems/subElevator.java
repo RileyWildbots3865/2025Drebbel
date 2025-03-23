@@ -53,9 +53,10 @@ public class subElevator extends SubsystemBase {
     setDefaultCommand(new cmdElevator_Auto(this, Constants.Elevator.L1));
   }
 
-  public void gotoElevatorPos() {
+  public Runnable gotoElevatorPos() {
     ElevatorPid.setSetpoint(ElpidSetPoint);
     elevatorMotor1.set(MathUtil.clamp(ElevatorPid.calculate(getEncoderValue()), -0.3, 0.1));
+        return null;
   }
 
   public void TeleOp(double speed){
