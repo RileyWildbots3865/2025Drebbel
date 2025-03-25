@@ -12,7 +12,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
-import edu.wpi.first.math.estimator.PoseEstimator;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -53,18 +53,22 @@ public class subSwerve extends SubsystemBase {
   private final swerveModule rearLeftModule = new swerveModule(kRearLeftDrivingCanId,kRearLeftTurningCanId,kRearLeftCANcoder,kRearLeftOffset);
   private final swerveModule rearRightModule = new swerveModule(kRearRightDrivingCanId,kRearRightTurningCanId,kRearRightCANcoder,kRearRightOffset);
   
-  public Pigeon2 gyro;
-  public SwerveDriveOdometry odometry;  
+  //public Pigeon2 gyro;
+  public AHRS gyro;
+  public SwerveDriveOdometry odometry;
+  public SwerveDrivePoseEstimator estimator;  
   //add pos estimator
 
   public subSwerve() {
-    gyro = new Pigeon2(18);
+    //gyro = new Pigeon2(18);
+    gyro = new AHRS(NavXComType.kUSB1);
     // warning: thread may reset gyro while trying to read during odomerty intit
     new Thread(() -> {
       try {
         Thread.sleep(1000);
         gyro.reset();
-        gyro.setYaw(0);
+        gyro.zeroYaw();
+        //gyro.setYaw(0);
       } catch (Exception e) { }
     }).start();
 
@@ -77,6 +81,12 @@ public class subSwerve extends SubsystemBase {
         rearLeftModule.getPosition(),
         rearRightModule.getPosition()
       });
+
+    estimator = new SwerveDrivePoseEstimator(moduleConstants.kDriveKinematics, 
+      getRotation2d(), 
+      getModulePosition(), 
+      getPose()
+    );
   }
 
   public Pose2d getPose() { return odometry.getPoseMeters(); }
@@ -186,6 +196,7 @@ public class subSwerve extends SubsystemBase {
   @Override
   public void periodic() {
     updateOdometry();
+    //estimator.update(getRotation2d(), getModulePosition());
     SmartDashboard.putNumber("Gyro", gyro.getRotation2d().getDegrees());
     // SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     // SmartDashboard.putNumber("FrontLeftAngle", frontLeftModule.getRawAngle() * 360);

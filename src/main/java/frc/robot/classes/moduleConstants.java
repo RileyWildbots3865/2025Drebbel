@@ -39,8 +39,8 @@ public final class moduleConstants {
     public static final int kDrivingMotorCurrentLimit = 60; // amps
     public static final int kTurningMotorCurrentLimit = 40; // amps
 
-    public static final double kTrackWidth = Units.inchesToMeters(24.5);
-    public static final double kWheelBase = Units.inchesToMeters(24.5);
+    public static final double kTrackWidth = Units.inchesToMeters(30);
+    public static final double kWheelBase = Units.inchesToMeters(30);
 
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
             new Translation2d(kWheelBase / 2, kTrackWidth / 2),

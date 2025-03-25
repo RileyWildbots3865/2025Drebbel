@@ -12,9 +12,7 @@ import com.revrobotics.spark.SparkMax;
  import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.Cage;
 
  public class subCage extends SubsystemBase {
@@ -38,8 +36,5 @@ import frc.robot.Constants.Cage;
    @Override
    public void periodic() {
      // This method will be called once per scheduler run
-
-    //SmartDashboard.putBoolean("servo in up position",Constants.Cage.servoisup);
-
    }
  }
