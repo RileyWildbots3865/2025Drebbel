@@ -2,6 +2,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //import com.ctre.phoenix6.hardware.Pigeon2;
@@ -58,6 +59,8 @@ public class subSwerve extends SubsystemBase {
   public SwerveDriveOdometry odometry;
   public SwerveDrivePoseEstimator estimator;  
   //add pos estimator
+
+  public Field2d field;
 
   public subSwerve() {
     //gyro = new Pigeon2(18);
@@ -196,6 +199,8 @@ public class subSwerve extends SubsystemBase {
   @Override
   public void periodic() {
     updateOdometry();
+    field.setRobotPose(getPose());
+    SmartDashboard.putData("Field", field);
     //estimator.update(getRotation2d(), getModulePosition());
     SmartDashboard.putNumber("Gyro", gyro.getRotation2d().getDegrees());
     // SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
