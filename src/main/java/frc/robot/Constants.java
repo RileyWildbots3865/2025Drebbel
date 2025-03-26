@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public final class Constants {
   public static class OperatorConstants {
@@ -64,5 +65,9 @@ public final class Constants {
 
     public static final double kalgeSpeed = 0.2;
   }
-  
+  public static final class VisionConstants{
+    public static final String llName = "Dorg.";
+    public static final double speedDeadbandValue = 10000;
+    public static final double angularVelocityDeadbandValue = 1000;
+  }
 }

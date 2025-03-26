@@ -13,6 +13,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,8 +24,12 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.classes.LimelightHelpers;
 import frc.robot.classes.moduleConstants;
 import frc.robot.classes.swerveModule;
+import frc.robot.classes.LimelightHelpers.LimelightResults;
+import frc.robot.classes.LimelightHelpers.PoseEstimate;
 
 public class subSwerve extends SubsystemBase {
 
@@ -58,9 +63,10 @@ public class subSwerve extends SubsystemBase {
   public AHRS gyro;
   public SwerveDriveOdometry odometry;
   public SwerveDrivePoseEstimator estimator;  
+  public double angularVelocity = 0, lastVelocityReading = 0;
   //add pos estimator
 
-  public Field2d field;
+  public Field2d field, llField;
 
   public subSwerve() {
     //gyro = new Pigeon2(18);
@@ -90,6 +96,7 @@ public class subSwerve extends SubsystemBase {
       getModulePosition(), 
       getPose()
     );
+
   }
 
   public Pose2d getPose() { return odometry.getPoseMeters(); }
@@ -199,19 +206,19 @@ public class subSwerve extends SubsystemBase {
   @Override
   public void periodic() {
     updateOdometry();
+    double currentReading = gyro.getYaw();
+    angularVelocity = (currentReading - lastVelocityReading) /.02;
+    lastVelocityReading = currentReading;
     field.setRobotPose(getPose());
     SmartDashboard.putData("Field", field);
-    //estimator.update(getRotation2d(), getModulePosition());
+    estimator.update(getRotation2d(), getModulePosition());
     SmartDashboard.putNumber("Gyro", gyro.getRotation2d().getDegrees());
-    // SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
-    // SmartDashboard.putNumber("FrontLeftAngle", frontLeftModule.getRawAngle() * 360);
-    // SmartDashboard.putNumber("FrontRightAngle", frontRightModule.getRawAngle() * 360);    
-    // SmartDashboard.putNumber("BackLeftAngle", rearLeftModule.getRawAngle() * 360);    
-    // SmartDashboard.putNumber("BackRightAngle", rearRightModule.getRawAngle() * 360);
-    
-    // SmartDashboard.putNumber("FrontLeftSpeed", frontLeftModule.drivingSparkMax.getEncoder().getVelocity());
-    // SmartDashboard.putNumber("FrontRightSpeed", frontRightModule.drivingSparkMax.getEncoder().getVelocity());
-    // SmartDashboard.putNumber("BackLeftSpeed", rearLeftModule.drivingSparkMax.getEncoder().getVelocity());
-    // SmartDashboard.putNumber("BackRightSpeed", rearRightModule.drivingSparkMax.getEncoder().getVelocity());
+    PoseEstimate mt2Results = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(VisionConstants.llName);
+    llField.setRobotPose(mt2Results.pose);
+    SmartDashboard.putData("LimelightField",llField);
+    if ((Math.abs(getRobotRelativeSpeeds().vxMetersPerSecond) < VisionConstants.speedDeadbandValue) && (Math.abs(getRobotRelativeSpeeds().vyMetersPerSecond) < 2) && (Math.abs(angularVelocity) < VisionConstants.speedDeadbandValue)){
+      estimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+      estimator.addVisionMeasurement(mt2Results.pose, mt2Results.timestampSeconds);
+    }
   }
 }
