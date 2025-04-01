@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
@@ -66,7 +62,7 @@ public class RobotContainer {
 
     driverOne.R1().whileTrue(new cmdIntake_TeleOp(intake, true));
     driverOne.L1().whileTrue(new cmdIntake_TeleOp(intake, false));
-    }
+  }
 
   public void configureDriverTwo() { // Binds for controller 2
     driverTwo.povUp().whileTrue(new cmdElevator_TeleOp(elevator, true)); 
@@ -74,7 +70,7 @@ public class RobotContainer {
 
     driverTwo.povLeft().whileTrue(new cmdFunnel_TeleOp(funnel, true));
     driverTwo.povRight().whileTrue(new cmdFunnel_TeleOp(funnel, false));
-    //cage
+
     driverTwo.L1().whileTrue(new cmdCage_TeleOp( cage, true ));
     driverTwo.R1().whileTrue(new cmdCage_TeleOp( cage, false));
 
@@ -85,11 +81,10 @@ public class RobotContainer {
     driverTwo.cross().whileTrue(new cmdElevator_Auto(elevator, Constants.Elevator.L1));
     driverTwo.square().whileTrue(new cmdElevator_Auto(elevator, Constants.Elevator.L2));
     driverTwo.triangle().whileTrue(new cmdElevator_Auto(elevator, Constants.Elevator.L3));
-   // driverTwo.circle().whileTrue(new cmdElevator_Auto(elevator, Constants.Elevator.L4));
+    driverTwo.circle().whileTrue(new cmdElevator_Auto(elevator, Constants.Elevator.L4));
   }
 
   public void commandConfigure() {
-    // Do something better than withTimeout. Its a cheap work around.
     NamedCommands.registerCommand("SpitCoral", new cmdIntake_Auto(intake).withTimeout(2));
     NamedCommands.registerCommand("Funnel Up", new cmdFunnel_TeleOp(funnel, fieldCentric));
     NamedCommands.registerCommand("ElevatorL2", new cmdElevator_Auto(elevator, Constants.Elevator.L2).withTimeout(2));

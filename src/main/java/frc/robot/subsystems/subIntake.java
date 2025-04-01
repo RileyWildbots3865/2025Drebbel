@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 
@@ -20,7 +16,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 
 public class subIntake extends SubsystemBase {
-  // Creates a new subIntake. 
+
   public SparkMax intakeMotor1;
   public SparkMax intakeMotor2;
 
@@ -28,8 +24,6 @@ public class subIntake extends SubsystemBase {
   SparkMaxConfig intakeConfig2 = new SparkMaxConfig();
 
   public static DigitalInput inSensor = new DigitalInput(Constants.Intake.inSensor);
-  //public static DigitalInput outSensor = new DigitalInput(Constants.Intake.outSensor);
-
 
   public subIntake() {
     intakeMotor1 = new SparkMax(Intake.intake1CanId, MotorType.kBrushless);
@@ -48,15 +42,12 @@ public class subIntake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //System.out.println(inSensor.get());
-    //System.out.println("blocked");
     SmartDashboard.putBoolean("coral in Sensor",inSensor.get());
     if (!inSensor.get() == true) {
       intakeMotor1.set(Constants.Intake.kintakeSpeed);
     }else{
       intakeMotor1.set(0);
     }
-    //SmartDashboard.putBoolean("coral out Sensor",outSensor.get());
   }
 }
 

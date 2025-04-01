@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-//import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -14,6 +13,7 @@ import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,17 +24,17 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.AprilTagTrack;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.classes.LimelightHelpers;
 import frc.robot.classes.moduleConstants;
 import frc.robot.classes.swerveModule;
-import frc.robot.classes.LimelightHelpers.LimelightResults;
 import frc.robot.classes.LimelightHelpers.PoseEstimate;
 
 public class subSwerve extends SubsystemBase {
 
   public static final double kFrontLeftOffset = 0.060302734375;
-  public static final double kFrontRightOffset = 0.28173828125 ;
+  public static final double kFrontRightOffset = 0.28173828125;
   public static final double kRearLeftOffset = 0.80859375 ;
   public static final double kRearRightOffset = 0.23779296875;
   // front left module
@@ -63,21 +63,29 @@ public class subSwerve extends SubsystemBase {
   public AHRS gyro;
   public SwerveDriveOdometry odometry;
   public SwerveDrivePoseEstimator estimator;  
-  public double angularVelocity = 0, lastVelocityReading = 0;
-  //add pos estimator
+  public double angularVelocity;
+  private PIDController desAnglePID = new PIDController(AprilTagTrack.kP, AprilTagTrack.kI, AprilTagTrack.kD);
+  private PIDController desDistancePID = new PIDController(0.2, 0, 0);
 
   public Field2d field, llField;
 
   public subSwerve() {
-    //gyro = new Pigeon2(18);
+    field = new Field2d();
+    llField = new Field2d();
     gyro = new AHRS(NavXComType.kUSB1);
+
+    desAnglePID.setSetpoint(0);
+    desAnglePID.setTolerance(5);
+
+    desDistancePID.setSetpoint(0.6);
+    desDistancePID.setTolerance(0.1);
+
     // warning: thread may reset gyro while trying to read during odomerty intit
     new Thread(() -> {
       try {
         Thread.sleep(1000);
         gyro.reset();
         gyro.zeroYaw();
-        //gyro.setYaw(0);
       } catch (Exception e) { }
     }).start();
 
@@ -206,19 +214,24 @@ public class subSwerve extends SubsystemBase {
   @Override
   public void periodic() {
     updateOdometry();
-    double currentReading = gyro.getYaw();
-    angularVelocity = (currentReading - lastVelocityReading) /.02;
-    lastVelocityReading = currentReading;
+    estimator.update(getRotation2d(), getModulePosition());
+    angularVelocity = gyro.getRate();
     field.setRobotPose(getPose());
     SmartDashboard.putData("Field", field);
     estimator.update(getRotation2d(), getModulePosition());
     SmartDashboard.putNumber("Gyro", gyro.getRotation2d().getDegrees());
-    PoseEstimate mt2Results = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(VisionConstants.llName);
-    llField.setRobotPose(mt2Results.pose);
-    SmartDashboard.putData("LimelightField",llField);
-    if ((Math.abs(getRobotRelativeSpeeds().vxMetersPerSecond) < VisionConstants.speedDeadbandValue) && (Math.abs(getRobotRelativeSpeeds().vyMetersPerSecond) < 2) && (Math.abs(angularVelocity) < VisionConstants.speedDeadbandValue)){
-      estimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-      estimator.addVisionMeasurement(mt2Results.pose, mt2Results.timestampSeconds);
+
+    try {
+      LimelightHelpers.SetRobotOrientation(VisionConstants.llName, estimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+      PoseEstimate mt2Results = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(VisionConstants.llName);
+      llField.setRobotPose(mt2Results.pose);
+      SmartDashboard.putData("LimelightField",llField);
+      if ((Math.abs(getRobotRelativeSpeeds().vxMetersPerSecond) < VisionConstants.speedDeadbandValue) && (Math.abs(getRobotRelativeSpeeds().vyMetersPerSecond) < 2) && (Math.abs(angularVelocity) < VisionConstants.speedDeadbandValue)){
+        estimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+        estimator.addVisionMeasurement(mt2Results.pose, mt2Results.timestampSeconds);
+      }  
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 }

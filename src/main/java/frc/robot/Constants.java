@@ -1,7 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-
 public final class Constants {
   public static class OperatorConstants {
     public static final int DriverOne = 0;
@@ -23,7 +21,6 @@ public final class Constants {
     public static final int intake1CanId = 9;
     public static final int intake2CanId = 10;
     public static final int inSensor = 0;
-    //public static final int outSensor = 0;
 
     public static final double kintakeSpeed = 0.3;
   }
@@ -59,15 +56,14 @@ public final class Constants {
     public static final double HorizontalOffset = 5.92;
     public static final double DistanceOffset = 5.1;
   }
-  public static final class Alge{
-    public static final int algemotor1CanId = 16;
-    public static final int algemotor2CanId = 17;
-
-    public static final double kalgeSpeed = 0.2;
-  }
   public static final class VisionConstants{
-    public static final String llName = "Dorg.";
+    public static final String llName = "limelight-dorg";
     public static final double speedDeadbandValue = 10000;
     public static final double angularVelocityDeadbandValue = 1000;
+  }
+  public static final class AprilTagTrack{
+    public static final double kP = .3;
+    public static final double kI = 0;
+    public static final double kD = 0;
   }
 }

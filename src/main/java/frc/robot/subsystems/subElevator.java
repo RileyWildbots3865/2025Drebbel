@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.MathUtil;
@@ -21,7 +17,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class subElevator extends SubsystemBase {
-  /** Creates a new subElevator. */
+
   public SparkMax elevatorMotor1;
   public SparkMax elevatorMotor2;
 
@@ -56,7 +52,7 @@ public class subElevator extends SubsystemBase {
   public Runnable gotoElevatorPos() {
     ElevatorPid.setSetpoint(ElpidSetPoint);
     elevatorMotor1.set(MathUtil.clamp(ElevatorPid.calculate(getEncoderValue()), -0.3, 0.1));
-        return null;
+    return null;
   }
 
   public void TeleOp(double speed){

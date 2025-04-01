@@ -15,7 +15,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class swerveModule {
     private final CANcoder rotationEncoder;
@@ -25,16 +24,13 @@ public class swerveModule {
 
     private final RelativeEncoder drivingEncoder;
 
-    private final SparkClosedLoopController drivingPIDController; // Library replaced SparkPIDController
+    private final SparkClosedLoopController drivingPIDController;
     private final PIDController turningPIDController;
 
-    //private final String name;
-
     public swerveModule(int drivingCANId, int turningCANId, int canCoderId, double angularOffset) {
-        //this.name = name;
         rotationEncoder = new CANcoder(canCoderId);
         CANcoderConfiguration canCoderConfiguration = new CANcoderConfiguration();
-        canCoderConfiguration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1; // 1 = [0,1), unsigned0_1      
+        canCoderConfiguration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;  
         canCoderConfiguration.MagnetSensor.MagnetOffset = -angularOffset;
         rotationEncoder.getConfigurator().apply(canCoderConfiguration);
         rotationEncoder.getPosition().setUpdateFrequency(100);
@@ -43,7 +39,7 @@ public class swerveModule {
         drivingSparkMax = new SparkMax(drivingCANId, MotorType.kBrushless);
         turningSparkMax = new SparkMax(turningCANId, MotorType.kBrushless);
 
-        SparkBaseConfig driveConfig = new SparkMaxConfig(); //New config for changing sparkmax settings
+        SparkBaseConfig driveConfig = new SparkMaxConfig();
         drivingEncoder = drivingSparkMax.getEncoder();
         drivingPIDController = drivingSparkMax.getClosedLoopController();
         
@@ -107,7 +103,7 @@ public class swerveModule {
         return rotationEncoder.getAbsolutePosition().getValueAsDouble() * 360;
     }
     public double getRawAngle(){        
-        return rotationEncoder.getAbsolutePosition().getValueAsDouble(); //* 360;    
+        return rotationEncoder.getAbsolutePosition().getValueAsDouble();  
     }
     public Rotation2d getRotation2d() {   
         return Rotation2d.fromDegrees(getAngle());     
